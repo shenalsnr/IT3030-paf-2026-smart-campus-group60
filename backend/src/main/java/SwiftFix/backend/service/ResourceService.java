@@ -3,16 +3,18 @@ package SwiftFix.backend.service;
 import SwiftFix.backend.exception.ResourceNotFoundException;
 import SwiftFix.backend.model.Resource;
 import SwiftFix.backend.repository.ResourceRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 public class ResourceService {
 
     private final ResourceRepository resourceRepository;
+
+    public ResourceService(ResourceRepository resourceRepository) {
+        this.resourceRepository = resourceRepository;
+    }
 
     public Resource createResource(Resource resource) {
         if (resource.getStatus() == null) {
