@@ -4,7 +4,8 @@ import CreateBooking from './components/CreateBooking';
 import MyBookings from './components/MyBookings';
 import AdminDashboard from './components/AdminDashboard';
 import FacilitiesCatalogue from './components/FacilitiesCatalogue';
-import { CalendarPlus, UserCheck, ShieldCheck, GraduationCap, Building2 } from 'lucide-react';
+import StudentCatalogue from './components/StudentCatalogue';
+import { UserCheck, ShieldCheck, GraduationCap, Building2 } from 'lucide-react';
 
 const App = () => {
     return (
@@ -21,9 +22,6 @@ const App = () => {
                                 <span className="text-2xl font-black tracking-tighter text-gray-800">Swift<span className="text-blue-600">Fix</span></span>
                             </div>
                             <div className="flex space-x-2">
-                                <Link to="/" className="flex items-center gap-1.5 px-3 py-2 rounded-md text-sm font-medium text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition-all">
-                                    <CalendarPlus size={18} /> Book
-                                </Link>
                                 <Link to="/my-bookings" className="flex items-center gap-1.5 px-3 py-2 rounded-md text-sm font-medium text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition-all">
                                     <UserCheck size={18} /> My Bookings
                                 </Link>
@@ -43,7 +41,8 @@ const App = () => {
                     <Routes>
                         <Route path="/" element={<CreateBooking />} />
                         <Route path="/my-bookings" element={<MyBookings />} />
-                        <Route path="/catalogue" element={<FacilitiesCatalogue />} />
+                        <Route path="/catalogue" element={<StudentCatalogue />} />
+                        <Route path="/admin/catalogue" element={<FacilitiesCatalogue />} />
                         <Route path="/admin" element={<AdminDashboard />} />
                     </Routes>
                 </main>
