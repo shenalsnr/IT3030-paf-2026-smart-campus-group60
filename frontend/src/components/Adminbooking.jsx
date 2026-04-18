@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { bookingService } from '../services/api';
 import { LayoutDashboard, CheckCircle, XCircle, Users, Calendar, Clock, MessageSquareText } from 'lucide-react';
-Adminbooking = () => {
+const Adminbooking = () => {
     const [bookings, setBookings] = useState([]);
     const [loading, setLoading] = useState(true);
     const [rejectingId, setRejectingId] = useState(null);

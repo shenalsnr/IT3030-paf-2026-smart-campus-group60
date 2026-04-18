@@ -4,7 +4,8 @@ import CreateBooking from './components/CreateBooking';
 import MyBookings from './components/MyBookings';
 
 import AdminLayout from './components/Admin';
-import { CalendarPlus, UserCheck, GraduationCap } from 'lucide-react';
+import Adminbooking from './components/Adminbooking';
+import { CalendarPlus, UserCheck, GraduationCap, ShieldCheck, Building2 } from 'lucide-react';
 
 // Wrapper for non-admin pages (keeps nav + footer)
 const PublicShell = () => (
@@ -48,10 +49,8 @@ const PublicShell = () => (
     </div>
 );
 
-import AdminDashboard from './components/AdminDashboard';
 import FacilitiesCatalogue from './components/FacilitiesCatalogue';
 import StudentCatalogue from './components/StudentCatalogue';
-import { UserCheck, ShieldCheck, GraduationCap, Building2 } from 'lucide-react';
 
 
 const App = () => {
@@ -98,7 +97,7 @@ const App = () => {
                         <Route path="/my-bookings" element={<MyBookings />} />
                         <Route path="/catalogue" element={<StudentCatalogue />} />
                         <Route path="/admin/catalogue" element={<FacilitiesCatalogue />} />
-                        <Route path="/admin" element={<AdminDashboard />} />
+                        <Route path="/admin" element={<Adminbooking />} />
                     </Routes>
                 </main>
 
