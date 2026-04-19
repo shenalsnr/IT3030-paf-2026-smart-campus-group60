@@ -1,8 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import CreateBooking from './components/CreateBooking';
-import MyBookings from './components/MyBookings';
-import AdminDashboard from './components/AdminDashboard';
+import CreateBooking from './components/booking/CreateBooking';
+import MyBookings from './components/booking/MyBookings';
+import AdminDashboard from './components/booking/AdminDashboard';
 import AdminHub from './components/AdminHub';
 import FacilitiesCatalogue from './components/FacilitiesCatalogue';
 import StudentCatalogue from './components/StudentCatalogue';
