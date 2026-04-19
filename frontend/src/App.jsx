@@ -14,21 +14,21 @@ const Navigation = () => {
     const isAdminRoute = location.pathname.startsWith('/admin');
 
     return (
-        <nav className="bg-white border-b border-gray-200 sticky top-0 z-50">
+        <nav className="bg-black border-b border-gray-800 sticky top-0 z-50">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between h-16 items-center">
                     <div className="flex items-center gap-2">
                         <div className="bg-blue-600 p-2 rounded-lg">
                             <GraduationCap className="text-white" size={24} />
                         </div>
-                        <span className="text-2xl font-black tracking-tighter text-gray-800">Swift<span className="text-blue-600">Fix</span></span>
+                        <span className="text-2xl font-black tracking-tighter text-white">Swift<span className="text-blue-500">Fix</span></span>
                     </div>
                     {!isAdminRoute && (
                         <div className="flex space-x-2">
-                            <Link to="/my-bookings" className="flex items-center gap-1.5 px-3 py-2 rounded-md text-sm font-medium text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition-all">
+                            <Link to="/my-bookings" className="flex items-center gap-1.5 px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-all">
                                 <UserCheck size={18} /> My Bookings
                             </Link>
-                            <Link to="/catalogue" className="flex items-center gap-1.5 px-3 py-2 rounded-md text-sm font-medium text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition-all">
+                            <Link to="/catalogue" className="flex items-center gap-1.5 px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-all">
                                 <Building2 size={18} /> Catalogue
                             </Link>
                         </div>
@@ -60,7 +60,7 @@ const App = () => {
                 </main>
 
                 {/* Footer */}
-                <footer className="mt-auto py-8 text-center text-gray-400 text-xs border-t border-gray-100 bg-white">
+                <footer className="mt-auto py-8 text-center text-gray-500 text-xs border-t border-gray-800 bg-black">
                     <p className="mb-1">SwiftFix &bull; Smart Campus Operations Hub</p>
                     <p>&copy; 2026 SwiftFix. All rights reserved.</p>
                 </footer>
