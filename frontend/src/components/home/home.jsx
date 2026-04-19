@@ -581,13 +581,6 @@ const Home = () => {
             Contact
           </button>
           <button
-            className="sf-nav-link"
-            id="nav-others"
-            type="button"
-          >
-            Others
-          </button>
-          <button
             className="sf-nav-login"
             id="nav-login"
             type="button"
