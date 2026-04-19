@@ -1,6 +1,7 @@
 package SwiftFix.backend.model;
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 public class Ticket {
@@ -10,6 +11,8 @@ public class Ticket {
     private Long id;
 
     private String description;
+    private String subject;
+
     private String category;
     private String priority;
     private String status;
@@ -17,61 +20,81 @@ public class Ticket {
     private String userId;
     private String technicianId;
 
-    // ✅ GETTERS & SETTERS
+    // 🔥 NEW FIELDS
+    private String regNo;
+    private String contactNo;
+    private String faculty;
+    private String department;
+    private String campus;
 
-    public Long getId() {
-        return id;
+    private LocalDateTime createdAt;
+
+    // 🔥 AUTO SET DATE BEFORE INSERT
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+        if (this.status == null) {
+            this.status = "OPEN";
+        }
     }
 
-    public String getDescription() {
-        return description;
-    }
+    // ================= GETTERS =================
 
-    public String getCategory() {
-        return category;
-    }
+    public Long getId() { return id; }
 
-    public String getPriority() {
-        return priority;
-    }
+    public String getDescription() { return description; }
 
-    public String getStatus() {
-        return status;
-    }
+    public String getSubject() { return subject; }
 
-    public String getUserId() {
-        return userId;
-    }
+    public String getCategory() { return category; }
 
-    public String getTechnicianId() {
-        return technicianId;
-    }
+    public String getPriority() { return priority; }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public String getStatus() { return status; }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+    public String getUserId() { return userId; }
 
-    public void setCategory(String category) {
-        this.category = category;
-    }
+    public String getTechnicianId() { return technicianId; }
 
-    public void setPriority(String priority) {
-        this.priority = priority;
-    }
+    public String getRegNo() { return regNo; }
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
+    public String getContactNo() { return contactNo; }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
+    public String getFaculty() { return faculty; }
 
-    public void setTechnicianId(String technicianId) {
-        this.technicianId = technicianId;
-    }
+    public String getDepartment() { return department; }
+
+    public String getCampus() { return campus; }
+
+    public LocalDateTime getCreatedAt() { return createdAt; }
+
+    // ================= SETTERS =================
+
+    public void setId(Long id) { this.id = id; }
+
+    public void setDescription(String description) { this.description = description; }
+
+    public void setSubject(String subject) { this.subject = subject; }
+
+    public void setCategory(String category) { this.category = category; }
+
+    public void setPriority(String priority) { this.priority = priority; }
+
+    public void setStatus(String status) { this.status = status; }
+
+    public void setUserId(String userId) { this.userId = userId; }
+
+    public void setTechnicianId(String technicianId) { this.technicianId = technicianId; }
+
+    public void setRegNo(String regNo) { this.regNo = regNo; }
+
+    public void setContactNo(String contactNo) { this.contactNo = contactNo; }
+
+    public void setFaculty(String faculty) { this.faculty = faculty; }
+
+    public void setDepartment(String department) { this.department = department; }
+
+    public void setCampus(String campus) { this.campus = campus; }
+
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 }
