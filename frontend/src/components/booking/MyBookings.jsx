@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { bookingService } from '../../services/api';
-import { Clock, Calendar, XCircle, CheckCircle, AlertCircle } from 'lucide-react';
-
 import { getResources } from '../../services/resourceService';
 
 const MyBookings = () => {
@@ -47,80 +45,94 @@ const MyBookings = () => {
 
     const getStatusStyle = (status) => {
         switch (status) {
-            case 'APPROVED': return 'bg-green-100 text-green-700 border-green-200';
-            case 'REJECTED': return 'bg-red-100 text-red-700 border-red-200';
-            case 'PENDING': return 'bg-yellow-100 text-yellow-700 border-yellow-200';
-            case 'CANCELLED': return 'bg-gray-100 text-gray-600 border-gray-200';
-            default: return 'bg-gray-100 text-gray-600 border-gray-200';
+            case 'APPROVED': return 'bg-emerald-50 text-emerald-700 border-emerald-100';
+            case 'REJECTED': return 'bg-rose-50 text-rose-700 border-rose-100';
+            case 'PENDING': return 'bg-amber-50 text-amber-700 border-amber-100';
+            case 'CANCELLED': return 'bg-gray-50 text-gray-600 border-gray-200';
+            default: return 'bg-gray-50 text-gray-600 border-gray-200';
         }
     };
 
-    if (loading) return <div className="text-center py-10">Loading your bookings...</div>;
+    if (loading) {
+        return (
+            <div className="flex justify-center items-center py-20 text-gray-500">
+                <span className="text-lg font-medium">Fetching your record...</span>
+            </div>
+        );
+    }
 
     return (
-        <div className="max-w-4xl mx-auto p-6">
-            <h2 className="text-3xl font-bold text-gray-800 mb-8 flex items-center gap-2">
-                <Clock className="text-blue-600" />
-                My Bookings
-            </h2>
+        <div className="max-w-6xl mx-auto p-6 md:p-8">
+            <div className="mb-10 pb-4 border-b border-gray-200">
+                <h2 className="text-3xl font-black text-gray-900 tracking-tight">My Bookings</h2>
+                <p className="text-gray-500 text-sm mt-1">Review and manage your personal resource reservations.</p>
+            </div>
 
             {bookings.length === 0 ? (
-                <div className="bg-white p-12 rounded-xl text-center shadow-inner border border-dashed border-gray-300">
-                    <p className="text-gray-500">You haven't made any bookings yet.</p>
+                <div className="bg-white p-20 rounded-[2rem] text-center shadow-sm border border-gray-100">
+                    <h3 className="text-xl font-bold text-gray-800 mb-2">No Bookings Yet</h3>
+                    <p className="text-gray-500">You haven't made any resource requests in the system.</p>
                 </div>
             ) : (
-                <div className="grid gap-6">
-                    {bookings.map((booking) => {
-                        const resource = resources.find(r => String(r.id) === String(booking.resourceId));
-                        return (
-                        <div key={booking.id} className="bg-white p-6 rounded-2xl shadow-md border border-gray-100 transition-all hover:shadow-lg">
-                            <div className="flex justify-between items-start">
-                                <div>
-                                    <div className="flex items-center gap-3 mb-2">
-                                        <span className="text-xl font-bold text-gray-800">{resource ? resource.name : 'Unknown Resource'}</span>
-                                        {resource ? (
-                                            <span className="bg-blue-50 text-blue-700 px-2 py-0.5 rounded text-[10px] uppercase font-bold border border-blue-100">
-                                                {resource.type}
-                                            </span>
-                                        ) : (
-                                            <span className="text-gray-400 text-[10px]">Loading...</span>
-                                        )}
-                                        <span className={`px-3 py-1 rounded-full text-xs font-semibold border ${getStatusStyle(booking.status)}`}>
-                                            {booking.status === 'APPROVED' ? 'CONFIRMED' : booking.status}
-                                        </span>
-                                    </div>
-                                    <div className="grid grid-cols-2 gap-x-8 gap-y-2 text-sm text-gray-600">
-                                        <div className="flex items-center gap-2 italic">
-                                            <Calendar size={14} /> {booking.date}
-                                        </div>
-                                        <div className="flex items-center gap-2">
-                                            <Clock size={14} /> {booking.startTime.slice(0, 5)} - {booking.endTime.slice(0, 5)}
-                                        </div>
-                                        <div className="col-span-2 mt-2">
-                                            <span className="font-semibold text-gray-700">Purpose:</span> {booking.purpose}
-                                        </div>
-                                        {booking.rejectionReason && (
-                                            <div className="col-span-2 mt-2 p-2 bg-red-50 text-red-600 rounded text-xs flex items-center gap-2">
-                                                <AlertCircle size={14} /> <strong>Rejection Reason:</strong> {booking.rejectionReason}
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-                                {booking.status === 'APPROVED' && (
-                                    <button
-                                        onClick={() => handleCancel(booking.id)}
-                                        className="text-red-500 hover:text-red-700 flex flex-col items-center gap-1 transition-colors"
-                                    >
-                                        <XCircle size={24} />
-                                        <span className="text-[10px] font-bold">CANCEL</span>
-                                    </button>
-                                )}
-                            </div>
-                        </div>
-                        );
-                    })}
+                <div className="bg-white rounded-[2rem] shadow-xl shadow-gray-200/50 overflow-hidden border border-gray-100">
+                    <div className="overflow-x-auto">
+                        <table className="w-full text-left border-collapse">
+                            <thead className="bg-gray-50 text-gray-600 uppercase text-[10px] font-black tracking-widest border-b border-gray-100">
+                                <tr>
+                                    <th className="px-8 py-5">Resource</th>
+                                    <th className="px-8 py-5">Date</th>
+                                    <th className="px-8 py-5">Time Slot</th>
+                                    <th className="px-8 py-5">Status</th>
+                                    <th className="px-8 py-5 text-right">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-gray-50">
+                                {bookings.map((booking) => {
+                                    const resource = resources.find(r => String(r.id) === String(booking.resourceId));
+                                    return (
+                                        <tr key={booking.id} className="hover:bg-gray-50/50 transition-colors">
+                                            <td className="px-8 py-6">
+                                                <div className="font-bold text-gray-900">{resource ? resource.name : 'Unknown'}</div>
+                                                <div className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mt-0.5">{resource?.type || 'N/A'}</div>
+                                            </td>
+                                            <td className="px-8 py-6 text-sm font-medium text-gray-600">
+                                                {booking.date}
+                                            </td>
+                                            <td className="px-8 py-6 text-sm font-medium text-gray-600">
+                                                {booking.startTime.slice(0, 5)} - {booking.endTime.slice(0, 5)}
+                                            </td>
+                                            <td className="px-8 py-6">
+                                                <span className={`inline-flex px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider border ${getStatusStyle(booking.status)}`}>
+                                                    {booking.status === 'APPROVED' ? 'CONFIRMED' : booking.status}
+                                                </span>
+                                                {booking.rejectionReason && (
+                                                    <div className="mt-1.5 text-[10px] text-rose-500 font-medium max-w-[200px]">
+                                                        Note: {booking.rejectionReason}
+                                                    </div>
+                                                )}
+                                            </td>
+                                            <td className="px-8 py-6 text-right">
+                                                {booking.status === 'APPROVED' && (
+                                                    <button
+                                                        onClick={() => handleCancel(booking.id)}
+                                                        className="text-[10px] font-black text-rose-500 hover:text-rose-700 uppercase tracking-widest transition-colors"
+                                                    >
+                                                        Cancel
+                                                    </button>
+                                                )}
+                                            </td>
+                                        </tr>
+                                    );
+                                })}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             )}
+            
+            <div className="mt-8 text-center">
+                <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest select-none">SwiftFix Personal Dashboard</p>
+            </div>
         </div>
     );
 };
