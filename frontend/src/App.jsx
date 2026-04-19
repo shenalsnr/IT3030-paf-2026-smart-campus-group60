@@ -49,9 +49,9 @@ const AppContent = () => {
     const isHome = location.pathname === '/';
 
     return (
-        <div className="min-h-screen bg-transparent font-sans text-gray-900">
+        <div className="min-h-screen flex flex-col bg-transparent font-sans text-gray-900">
             <Navigation />
-            <main>
+            <main className="flex-grow">
                 <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/my-bookings" element={<div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8"><MyBookings /></div>} />
