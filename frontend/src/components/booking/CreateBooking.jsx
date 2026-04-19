@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { bookingService } from '../services/api';
+import { bookingService } from '../../services/api';
 import { Calendar, Clock, Users, FileText, Send } from 'lucide-react';
 
 const CreateBooking = () => {

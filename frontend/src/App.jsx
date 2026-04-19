@@ -1,8 +1,9 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import CreateBooking from './components/CreateBooking';
-import MyBookings from './components/MyBookings';
-import AdminDashboard from './components/AdminDashboard';
+import CreateBooking from './components/booking/CreateBooking';
+import MyBookings from './components/booking/MyBookings';
+import AdminDashboard from './components/booking/AdminDashboard';
+import AdminHub from './components/AdminHub';
 import FacilitiesCatalogue from './components/FacilitiesCatalogue';
 import StudentCatalogue from './components/StudentCatalogue';
 import { UserCheck, ShieldCheck, GraduationCap, Building2 } from 'lucide-react';
@@ -42,8 +43,9 @@ const App = () => {
                         <Route path="/" element={<CreateBooking />} />
                         <Route path="/my-bookings" element={<MyBookings />} />
                         <Route path="/catalogue" element={<StudentCatalogue />} />
+                        <Route path="/admin" element={<AdminHub />} />
+                        <Route path="/admin/bookings" element={<AdminDashboard />} />
                         <Route path="/admin/catalogue" element={<FacilitiesCatalogue />} />
-                        <Route path="/admin" element={<AdminDashboard />} />
                     </Routes>
                 </main>
 

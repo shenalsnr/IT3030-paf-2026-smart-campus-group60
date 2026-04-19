@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { bookingService } from '../services/api';
+import { bookingService } from '../../services/api';
 import { Clock, Calendar, XCircle, CheckCircle, AlertCircle } from 'lucide-react';
 
-import { getResources } from '../services/resourceService';
+import { getResources } from '../../services/resourceService';
 
 const MyBookings = () => {
     const [bookings, setBookings] = useState([]);
