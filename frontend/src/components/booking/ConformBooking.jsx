@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { bookingService } from '../../services/api';
 import { getResources } from '../../services/resourceService';
-import { CheckCircle, Calendar, Clock, Building2, Users, Search, FilterX, Hash } from 'lucide-react';
+import { CheckCircle, Calendar, Clock, Building2, Users, Search, FilterX, Hash, Trash2 } from 'lucide-react';
 
 const ConformBooking = () => {
     const [bookings, setBookings] = useState([]);
@@ -46,6 +46,18 @@ const ConformBooking = () => {
     const resetFilters = () => {
         setSearchTerm('');
         setFilterDate('');
+    };
+
+    const handleRemove = async (id) => {
+        if (window.confirm('Are you sure you want to remove this confirmed booking?')) {
+            try {
+                await bookingService.cancelBooking(id);
+                fetchData();
+            } catch (error) {
+                console.error("Error removing booking:", error);
+                alert("Failed to remove booking");
+            }
+        }
     };
 
     if (loading) {
@@ -123,12 +135,13 @@ const ConformBooking = () => {
                                 <th className="px-8 py-5 font-black "><Clock size={16} className="inline mr-2"/> Time</th>
                                 <th className="px-8 py-5 text-center font-black "><Users size={16} className="inline mr-2"/> People</th>
                                 <th className="px-8 py-5 text-center font-black ">Status</th>
+                                <th className="px-8 py-5 text-center font-black ">Actions</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-50 font-medium ">
                             {filteredBookings.length === 0 ? (
                                 <tr>
-                                    <td colSpan="6" className="px-8 py-20 text-center">
+                                    <td colSpan="7" className="px-8 py-20 text-center">
                                         <div className="flex flex-col items-center justify-center">
                                             <Building2 size={48} className="text-gray-200 mb-4" />
                                             <h3 className="text-lg font-bold text-gray-700">No matching bookings found</h3>
@@ -166,6 +179,17 @@ const ConformBooking = () => {
                                                     <span className="flex items-center gap-1.5 px-3 py-1 bg-green-50 text-green-700 rounded-full text-[10px] font-black uppercase tracking-widest border border-green-200">
                                                         <CheckCircle size={12} /> Confirmed
                                                     </span>
+                                                </div>
+                                            </td>
+                                            <td className="px-8 py-5">
+                                                <div className="flex justify-center">
+                                                    <button 
+                                                        onClick={() => handleRemove(booking.id)}
+                                                        className="p-2 text-rose-500 hover:bg-rose-50 rounded-lg transition-colors group/btn"
+                                                        title="Remove Booking"
+                                                    >
+                                                        <Trash2 size={18} className="group-hover/btn:scale-110 transition-transform" />
+                                                    </button>
                                                 </div>
                                             </td>
                                         </tr>
