@@ -6,9 +6,19 @@ import {
     Building2,
     ArrowRight,
     LayoutDashboard,
+    CheckCircle,
 } from 'lucide-react';
 
 const ADMIN_SECTIONS = [
+    {
+        title: 'Confirmed Bookings',
+        description: 'View a strict list of all successfully approved and confirmed resource bookings.',
+        icon: CheckCircle,
+        color: '#10b981',
+        bg: '#ecfdf5',
+        border: '#a7f3d0',
+        href: '/admin/confirmed-bookings',
+    },
     {
         title: 'Booking Management',
         description: 'Review, approve or reject resource booking requests submitted by users.',

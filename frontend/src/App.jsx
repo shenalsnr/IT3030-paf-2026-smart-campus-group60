@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import CreateBooking from './components/booking/CreateBooking';
 import MyBookings from './components/booking/MyBookings';
 import AdminDashboard from './components/booking/AdminDashboard';
+import ConformBooking from './components/booking/ConformBooking';
 import AdminHub from './components/AdminHub';
 import FacilitiesCatalogue from './components/FacilitiesCatalogue';
 import StudentCatalogue from './components/StudentCatalogue';
@@ -45,6 +46,7 @@ const App = () => {
                         <Route path="/catalogue" element={<StudentCatalogue />} />
                         <Route path="/admin" element={<AdminHub />} />
                         <Route path="/admin/bookings" element={<AdminDashboard />} />
+                        <Route path="/admin/confirmed-bookings" element={<ConformBooking />} />
                         <Route path="/admin/catalogue" element={<FacilitiesCatalogue />} />
                     </Routes>
                 </main>
