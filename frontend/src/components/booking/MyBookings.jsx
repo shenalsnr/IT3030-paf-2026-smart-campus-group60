@@ -40,7 +40,7 @@ const MyBookings = () => {
     const handleCancel = async (id) => {
         const reason = window.prompt('Please enter a reason for cancellation:');
         if (reason === null) return; // User cancelled prompt
-        
+
         try {
             await bookingService.cancelBooking(id, reason || 'Cancelled by user');
             fetchBookings();
@@ -57,7 +57,7 @@ const MyBookings = () => {
     const downloadQrCode = () => {
         const canvas = document.getElementById('booking-qr-code');
         if (!canvas) return;
-        
+
         const pngUrl = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
         let downloadLink = document.createElement("a");
         downloadLink.href = pngUrl;
@@ -131,7 +131,7 @@ const MyBookings = () => {
                                                 </span>
                                                 {booking.rejectionReason && (
                                                     <div className={`mt-1.5 text-[10px] font-medium max-w-[200px] ${booking.status === 'CANCELLED' ? 'text-gray-500' : 'text-rose-500'}`}>
-                                                        {booking.status === 'CANCELLED' ? 'Cancellation Reason: ' : 'Rejection Note: '} 
+                                                        {booking.status === 'CANCELLED' ? 'Cancellation Reason: ' : 'Rejection Note: '}
                                                         {booking.rejectionReason}
                                                     </div>
                                                 )}
@@ -173,24 +173,24 @@ const MyBookings = () => {
                 <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-300">
                     <div className="bg-white w-full max-w-md rounded-[2.5rem] shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300 border border-gray-100">
                         <div className="relative p-8 text-center">
-                            <button 
+                            <button
                                 onClick={() => setShowQrModal(false)}
                                 className="absolute right-6 top-6 p-2 text-gray-400 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-all"
                             >
                                 <X size={24} />
                             </button>
-                            
+
                             <div className="mb-6 flex justify-center">
                                 <div className="p-4 bg-indigo-50 rounded-2xl text-indigo-600">
                                     <QrCode size={32} />
                                 </div>
                             </div>
-                            
+
                             <h3 className="text-2xl font-black text-gray-900 tracking-tight mb-2">Booking QR Pass</h3>
                             <p className="text-gray-500 text-sm mb-8 px-4">Present this code at the resource location for verification.</p>
-                            
+
                             <div className="bg-gray-50 p-6 rounded-3xl mb-8 flex flex-col items-center border border-gray-100">
-                                <QRCodeCanvas 
+                                <QRCodeCanvas
                                     id="booking-qr-code"
                                     value={JSON.stringify({
                                         id: selectedBooking.id,
@@ -211,16 +211,16 @@ const MyBookings = () => {
                                         excavate: true,
                                     }}
                                 />
-                                
+
                                 <div className="mt-6 w-full text-left space-y-2 text-xs font-bold text-gray-500 uppercase tracking-widest px-4">
-                                    <div className="flex items-center gap-2"><User size={14} className="text-indigo-400"/> {selectedBooking.userId}</div>
-                                    <div className="flex items-center gap-2"><Landmark size={14} className="text-indigo-400"/> {resources.find(r => String(r.id) === String(selectedBooking.resourceId))?.name || 'Unknown'}</div>
-                                    <div className="flex items-center gap-2"><Calendar size={14} className="text-indigo-400"/> {selectedBooking.date}</div>
-                                    <div className="flex items-center gap-2"><Clock size={14} className="text-indigo-400"/> {selectedBooking.startTime.slice(0, 5)} - {selectedBooking.endTime.slice(0, 5)}</div>
+                                    <div className="flex items-center gap-2"><User size={14} className="text-indigo-400" /> {selectedBooking.userId}</div>
+                                    <div className="flex items-center gap-2"><Landmark size={14} className="text-indigo-400" /> {resources.find(r => String(r.id) === String(selectedBooking.resourceId))?.name || 'Unknown'}</div>
+                                    <div className="flex items-center gap-2"><Calendar size={14} className="text-indigo-400" /> {selectedBooking.date}</div>
+                                    <div className="flex items-center gap-2"><Clock size={14} className="text-indigo-400" /> {selectedBooking.startTime.slice(0, 5)} - {selectedBooking.endTime.slice(0, 5)}</div>
                                 </div>
                             </div>
-                            
-                            <button 
+
+                            <button
                                 onClick={downloadQrCode}
                                 className="w-full py-4 bg-gray-900 text-white rounded-2xl font-black uppercase tracking-[0.2em] text-xs hover:bg-black transition-all flex items-center justify-center gap-3 shadow-xl shadow-gray-900/20"
                             >
