@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 /* ═══════════════════════════════════════════════════
    EMBEDDED STYLES — all scoped to .sf-home wrapper
@@ -483,6 +484,7 @@ const CONTACT_CARDS = [
    MAIN COMPONENT
    ══════════════════════════════════════════════════ */
 const Home = () => {
+  const navigate = useNavigate();
   const [scrolled, setScrolled] = useState(false);
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
 
@@ -536,6 +538,7 @@ const Home = () => {
             className="sf-nav-login"
             id="nav-login"
             type="button"
+            onClick={() => navigate('/auth')}
           >
             Login
           </button>
