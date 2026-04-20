@@ -27,7 +27,7 @@ const CreateBooking = () => {
                 const response = await bookingService.getAllBookings();
                 const relevant = response.data.filter(b =>
                     b.resourceId === formData.resourceId &&
-                    (b.status === 'PENDING' || b.status === 'APPROVED')
+                    (b.status === 'PENDING' || b.status === 'CONFIRMED')
                 );
                 setExistingBookings(relevant);
             } catch (error) {
