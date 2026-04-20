@@ -13,6 +13,7 @@ import StudentCatalogue from './components/StudentCatalogue';
 import AdminFeedback from './components/AdminFeedback';
 import UserProfile from './pages/student/StudentProfile';
 import UserManagement from './pages/admin/UserManagement';
+import NotificationPanel from './components/NotificationPanel';
 import { UserCheck, ShieldCheck, GraduationCap, Building2, LogOut, User } from 'lucide-react';
 import { useAuth } from './context/AuthContext';
 import { ProtectedRoute } from './components/ProtectedRoute';
@@ -49,7 +50,8 @@ const Navigation = () => {
                             </Link>
                         </div>
                     )}
-                    <div className="flex space-x-2 ml-4">
+                    <div className="flex items-center space-x-2 ml-4">
+                        <NotificationPanel />
                         <button onClick={() => { 
                             logout(); 
                             window.location.href = '/'; 

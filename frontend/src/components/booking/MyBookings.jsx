@@ -87,7 +87,7 @@ const MyBookings = () => {
 
     const getStatusStyle = (status) => {
         switch (status) {
-            case 'CONFIRMED': return 'bg-emerald-50 text-emerald-700 border-emerald-100';
+            case 'APPROVED': return 'bg-emerald-50 text-emerald-700 border-emerald-100';
             case 'REJECTED': return 'bg-rose-50 text-rose-700 border-rose-100';
             case 'PENDING': return 'bg-amber-50 text-amber-700 border-amber-100';
             case 'CANCELLED': return 'bg-gray-50 text-gray-600 border-gray-200';
@@ -155,7 +155,7 @@ const MyBookings = () => {
                                                 )}
                                             </td>
                                             <td className="px-8 py-6 text-right">
-                                                {booking.status === 'CONFIRMED' && (
+                                                {booking.status === 'APPROVED' && (
                                                     <div className="flex justify-end gap-3">
                                                         <button
                                                             onClick={() => handleGenerateQr(booking)}
