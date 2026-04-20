@@ -1,5 +1,11 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, Link, useLocation } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Link,
+  useLocation,
+} from "react-router-dom";
 
 // Home Component
 import Home from "./components/home/home";
@@ -27,12 +33,11 @@ import UserProfile from "./pages/student/StudentProfile";
 import UserManagement from "./pages/admin/UserManagement";
 
 import {
-  UserCheck,
-  ShieldCheck,
   GraduationCap,
   Building2,
   LogOut,
   User,
+  UserCheck,
   Ticket,
   PlusCircle,
 } from "lucide-react";
@@ -130,7 +135,8 @@ const AppContent = () => {
   const location = useLocation();
 
   const isHome = location.pathname === "/";
-  const isAuth = location.pathname === "/auth";
+  const isAuth =
+    location.pathname === "/auth" || location.pathname === "/oauth-callback";
 
   return (
     <div className="min-h-screen flex flex-col bg-transparent font-sans text-gray-900">
@@ -195,7 +201,6 @@ const AppContent = () => {
             }
           />
 
-          {/* Ticket Routes */}
           <Route
             path="/tickets/create"
             element={
@@ -298,7 +303,7 @@ const AppContent = () => {
 
       {!isHome && !isAuth && (
         <footer className="mt-auto py-8 text-center text-gray-500 text-xs border-t border-gray-800 bg-black">
-          <p className="mb-1">SwiftFix &bull; Smart Campus Operations Hub</p>
+          <p className="mb-1">SwiftFix • Smart Campus Operations Hub</p>
           <p>&copy; 2026 SwiftFix. All rights reserved.</p>
         </footer>
       )}
