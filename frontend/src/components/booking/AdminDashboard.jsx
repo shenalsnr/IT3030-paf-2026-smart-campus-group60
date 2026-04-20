@@ -71,7 +71,6 @@ const AdminDashboard = () => {
       alert("Please provide a rejection reason");
       return;
     }
-
     try {
       await bookingService.rejectBooking(id, reason.trim());
       setRejectingId(null);
@@ -86,53 +85,16 @@ const AdminDashboard = () => {
   const getStatusBadge = (status) => {
     const styles = {
       PENDING: "bg-yellow-100 text-yellow-800 border-yellow-200",
-      CONFIRMED: "bg-green-100 text-green-800 border-green-200",
+      APPROVED: "bg-green-100 text-green-800 border-green-200",
       REJECTED: "bg-red-100 text-red-800 border-red-200",
       CANCELLED: "bg-gray-100 text-gray-800 border-gray-200",
     };
-
     return `px-2 py-0.5 rounded text-[10px] font-bold border ${
       styles[status] || "bg-gray-100 text-gray-800 border-gray-200"
     }`;
   };
 
-    const handleApprove = async (id) => {
-        try {
-            await bookingService.confirmBooking(id);
-            fetchBookings();
-        } catch (error) {
-            alert('Error approving booking');
-        }
-    };
-
-    const handleReject = async (id) => {
-        if (!reason) {
-            alert('Please provide a rejection reason');
-            return;
-        }
-        try {
-            await bookingService.rejectBooking(id, reason);
-            setRejectingId(null);
-            setReason('');
-            fetchBookings();
-        } catch (error) {
-            alert('Error rejecting booking');
-        }
-    };
-
-    const getStatusBadge = (status) => {
-        const styles = {
-            PENDING: 'bg-yellow-100 text-yellow-800 border-yellow-200',
-            APPROVED: 'bg-green-100 text-green-800 border-green-200',
-            REJECTED: 'bg-red-100 text-red-800 border-red-200',
-            CANCELLED: 'bg-gray-100 text-gray-800 border-gray-200',
-        };
-        return `px-2 py-0.5 rounded text-[10px] font-bold border ${styles[status]}`;
-    };
-
-    if (loading) return <div className="text-center py-20 font-semibold text-gray-500">Loading Dashboard...</div>;
-
-    const pendingBookings = bookings.filter(b => b.status === 'PENDING');
+  const pendingBookings = bookings.filter((b) => b.status === "PENDING");
 
   if (loading) {
     return (
@@ -237,7 +199,7 @@ const AdminDashboard = () => {
                         <button
                           onClick={() => handleApprove(booking.id)}
                           className="text-green-500 hover:text-green-700 transition-colors"
-                          title="Confirm"
+                          title="Approve"
                         >
                           <CheckCircle size={22} />
                         </button>
