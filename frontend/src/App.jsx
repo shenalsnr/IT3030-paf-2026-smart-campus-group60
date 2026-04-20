@@ -1,19 +1,35 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
+
+// Home Component
 import Home from './components/home/home';
 import AuthPage from './pages/auth/AuthPage';
 import OAuthCallback from './pages/auth/OAuthCallback';
+
+// Booking Components
 import CreateBooking from './components/booking/CreateBooking';
 import MyBookings from './components/booking/MyBookings';
 import AdminDashboard from './components/booking/AdminDashboard';
 import ConformBooking from './components/booking/ConformBooking';
 import AdminHub from './components/AdminHub';
+
+// Ticket Module Imports
+import CreateTicket from './components/CreateTicket';
+import UserTickets from './components/UserTickets';
+import AdminTickets from './components/AdminTickets';
+import AdminTicketDetail from './components/AdminTicketDetail';
+
+// Other Components
 import FacilitiesCatalogue from './components/FacilitiesCatalogue';
 import StudentCatalogue from './components/StudentCatalogue';
 import AdminFeedback from './components/AdminFeedback';
 import UserProfile from './pages/student/StudentProfile';
 import UserManagement from './pages/admin/UserManagement';
+
 import NotificationPanel from './components/NotificationPanel';
+
+
+
 import { UserCheck, ShieldCheck, GraduationCap, Building2, LogOut, User } from 'lucide-react';
 import { useAuth } from './context/AuthContext';
 import { ProtectedRoute } from './components/ProtectedRoute';
@@ -82,13 +98,13 @@ const AppContent = () => {
                     <Route path="/my-bookings" element={<div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8"><MyBookings /></div>} />
                     <Route path="/catalogue" element={<div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8"><StudentCatalogue /></div>} />
                     <Route path="/student-catalogue" element={<div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8"><StudentCatalogue /></div>} />
+                    <Route path="/book" element={<div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8"><CreateBooking /></div>} />
                     <Route path="/admin" element={<ProtectedRoute requiredRole="ADMIN"><AdminHub /></ProtectedRoute>} />
                     <Route path="/admin/bookings" element={<ProtectedRoute requiredRole="ADMIN"><AdminDashboard /></ProtectedRoute>} />
                     <Route path="/admin/confirmed-bookings" element={<ProtectedRoute requiredRole="ADMIN"><ConformBooking /></ProtectedRoute>} />
                     <Route path="/admin/catalogue" element={<ProtectedRoute requiredRole="ADMIN"><FacilitiesCatalogue /></ProtectedRoute>} />
                     <Route path="/admin/feedback" element={<ProtectedRoute requiredRole="ADMIN"><AdminFeedback /></ProtectedRoute>} />
                     <Route path="/admin/users" element={<ProtectedRoute requiredRole="ADMIN"><UserManagement /></ProtectedRoute>} />
-                    <Route path="/book" element={<div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8"><CreateBooking /></div>} />
                 </Routes>
             </main>
             {!isHome && !isAuth && (
