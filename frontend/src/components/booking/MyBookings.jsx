@@ -57,7 +57,7 @@ const MyBookings = () => {
 
     const handleCancel = async (id) => {
         const reason = window.prompt('Please enter a reason for cancellation:');
-        if (reason === null) return; // User cancelled prompt
+        if (reason === null) return; // User cancelled 
 
         try {
             await bookingService.cancelBooking(id, reason || 'Cancelled by user');
@@ -217,7 +217,7 @@ const MyBookings = () => {
                                     level={"H"}
                                     includeMargin={true}
                                     imageSettings={{
-                                        src: "/favicon.ico", // Attempt to include logo if exists
+                                        src: "/favicon.ico", 
                                         x: undefined,
                                         y: undefined,
                                         height: 24,

@@ -33,10 +33,6 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
                                               @Param("startTime") LocalTime startTime,
                                               @Param("endTime") LocalTime endTime);
 
-    /**
-     * Auto-expires only admin-confirmed (CONFIRMED) bookings whose end time has passed.
-     * Expired records are kept in the database for history and reference.
-     */
     @Modifying
     @Query("UPDATE Booking b SET b.status = SwiftFix.backend.model.BookingStatus.EXPIRED " +
            "WHERE b.status = SwiftFix.backend.model.BookingStatus.CONFIRMED " +

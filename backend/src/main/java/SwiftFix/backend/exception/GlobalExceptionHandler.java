@@ -11,18 +11,11 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Global Exception Handler
- * ✅ Catches ALL exceptions and returns ACTUAL error messages
- * ✅ Never returns generic "An unexpected error occurred"
- * ✅ Shows real database errors, null pointer exceptions, file issues, etc.
- */
+
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    /**
-     * Handle ResourceNotFoundException
-     */
+   
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<Map<String, Object>> handleResourceNotFoundException(
             ResourceNotFoundException ex,
@@ -40,10 +33,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
 
-    /**
-     * Handle IllegalArgumentException
-     * (email exists, passwords don't match, validation fails, etc.)
-     */
+   
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<Map<String, Object>> handleIllegalArgumentException(
             IllegalArgumentException ex,
@@ -61,9 +51,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
-    /**
-     * Handle File Upload Size Exceeded
-     */
+    
     @ExceptionHandler(MaxUploadSizeExceededException.class)
     public ResponseEntity<Map<String, Object>> handleMaxUploadSizeExceededException(
             MaxUploadSizeExceededException ex,
