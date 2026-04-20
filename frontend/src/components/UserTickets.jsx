@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getTickets } from "../services/ticketService";
+import { getTicketsByUserId } from "../services/ticketService";
 import { Link } from "react-router-dom";
 import { Search, Calendar, RotateCcw } from "lucide-react";
 
@@ -14,14 +14,9 @@ export default function UserTickets() {
 
   const load = async () => {
     try {
-      const res = await getTickets();
-
-      const userTickets = res.data.filter(
-        (t) => t.userId === userId
-      );
-
-      setTickets(userTickets);
-      setFiltered(userTickets);
+      const res = await getTicketsByUserId(userId);
+      setTickets(res.data);
+      setFiltered(res.data);
     } catch (err) {
       console.error(err);
     }

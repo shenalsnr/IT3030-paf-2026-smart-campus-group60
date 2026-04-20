@@ -3,5 +3,10 @@ package SwiftFix.backend.repository;
 import SwiftFix.backend.model.Ticket;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 public interface TicketRepository extends JpaRepository<Ticket, Long> {
+
+    /** For "my tickets" views without loading the entire table. */
+    List<Ticket> findByUserIdOrderByCreatedAtDesc(String userId);
 }

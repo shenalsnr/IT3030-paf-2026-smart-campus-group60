@@ -1,95 +1,60 @@
-package SwiftFix.backend.model;
+package SwiftFix.backend.dto.ticket;
 
-import SwiftFix.backend.enums.TicketStatus;
-import jakarta.persistence.*;
+import SwiftFix.backend.model.Ticket;
 
 import java.time.LocalDateTime;
 
 /**
- * Maintenance & incident ticket linked to a user and optionally to a catalogue {@code resourceId}.
- * Workflow is enforced in {@link SwiftFix.backend.service.TicketService}.
+ * Stable API shape returned to the React client (decouples entity from wire format).
  */
-@Entity
-@Table(name = "ticket")
-public class Ticket {
+public class TicketResponse {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 32)
-    private TicketStatus status = TicketStatus.OPEN;
-
-    @Column(nullable = false, length = 200)
+    private String status;
     private String subject;
-
-    @Column(nullable = false, length = 4000)
     private String description;
-
-    @Column(length = 64)
     private String category;
-
-    @Column(length = 16)
     private String priority;
-
-    /** Display name from the reporter (OAuth / form). */
-    @Column(length = 120)
     private String reporterName;
-
-    @Column(length = 160)
     private String reporterEmail;
-
-    @Column(length = 64)
     private String regNo;
-
-    @Column(length = 32)
     private String contactNo;
-
-    @Column(length = 120)
     private String faculty;
-
-    @Column(length = 120)
     private String department;
-
-    @Column(length = 120)
     private String campus;
-
-    /** Owning user (e.g. OAuth subject or internal id). */
-    @Column(length = 64)
     private String userId;
-
-    /** Assigned technician / staff id. */
-    @Column(length = 64)
     private String technicianId;
-
-    /** Optional FK-style reference to Resource.id (no JPA relation — avoids tight coupling). */
     private Long resourceId;
-
-    @Column(length = 200)
     private String location;
-
-    @Column(length = 2000)
     private String resolutionNotes;
-
-    @Column(length = 1000)
     private String rejectionReason;
-
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = this.createdAt;
-        if (this.status == null) {
-            this.status = TicketStatus.OPEN;
-        }
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        this.updatedAt = LocalDateTime.now();
+    public static TicketResponse fromEntity(Ticket t) {
+        TicketResponse r = new TicketResponse();
+        r.setId(t.getId());
+        r.setStatus(t.getStatus() != null ? t.getStatus().name() : null);
+        r.setSubject(t.getSubject());
+        r.setDescription(t.getDescription());
+        r.setCategory(t.getCategory());
+        r.setPriority(t.getPriority());
+        r.setReporterName(t.getReporterName());
+        r.setReporterEmail(t.getReporterEmail());
+        r.setRegNo(t.getRegNo());
+        r.setContactNo(t.getContactNo());
+        r.setFaculty(t.getFaculty());
+        r.setDepartment(t.getDepartment());
+        r.setCampus(t.getCampus());
+        r.setUserId(t.getUserId());
+        r.setTechnicianId(t.getTechnicianId());
+        r.setResourceId(t.getResourceId());
+        r.setLocation(t.getLocation());
+        r.setResolutionNotes(t.getResolutionNotes());
+        r.setRejectionReason(t.getRejectionReason());
+        r.setCreatedAt(t.getCreatedAt());
+        r.setUpdatedAt(t.getUpdatedAt());
+        return r;
     }
 
     public Long getId() {
@@ -100,11 +65,11 @@ public class Ticket {
         this.id = id;
     }
 
-    public TicketStatus getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(TicketStatus status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 

@@ -1,49 +1,84 @@
 package SwiftFix.backend.controller;
 
-import SwiftFix.backend.model.Ticket;
+import SwiftFix.backend.dto.ticket.*;
 import SwiftFix.backend.service.TicketService;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Maintenance & Incident Ticketing API (Module C).
+ * Prefix {@code /api/tickets} keeps resources separate from other controllers.
+ */
 @RestController
-@RequestMapping("/tickets")
-@CrossOrigin
+@RequestMapping("/api/tickets")
+@CrossOrigin(origins = "*")
 public class TicketController {
 
-    private final TicketService service;
+    private final TicketService ticketService;
 
-    public TicketController(TicketService service) {
-        this.service = service;
+    public TicketController(TicketService ticketService) {
+        this.ticketService = ticketService;
     }
 
-    // 🔷 CREATE TICKET
+    /** POST — create ticket (201 Created). */
     @PostMapping
-    public Ticket create(@RequestBody Ticket ticket) {
-        return service.createTicket(ticket);
+    public ResponseEntity<TicketResponse> create(@Valid @RequestBody TicketCreateRequest request) {
+        TicketResponse created = ticketService.create(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
-    // 🔷 GET ALL TICKETS
+    /** GET — list all tickets (admin / staff views). */
     @GetMapping
-    public List<Ticket> getAll() {
-        return service.getAllTickets();
+    public ResponseEntity<List<TicketResponse>> listAll() {
+        return ResponseEntity.ok(ticketService.findAll());
     }
 
-    // 🔷 UPDATE STATUS
+    /** GET — single ticket by id. */
+    @GetMapping("/{id}")
+    public ResponseEntity<TicketResponse> getById(@PathVariable Long id) {
+        return ResponseEntity.ok(ticketService.findById(id));
+    }
+
+    /** GET — tickets raised by a specific user ("my tickets"). */
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<TicketResponse>> listForUser(@PathVariable String userId) {
+        return ResponseEntity.ok(ticketService.findByUserId(userId));
+    }
+
+    /**
+     * PUT — advance workflow (OPEN → IN_PROGRESS → RESOLVED → CLOSED) or reject with reason.
+     */
     @PutMapping("/{id}")
-    public Ticket updateStatus(@PathVariable Long id, @RequestBody Ticket t) {
-        return service.updateStatus(id, t.getStatus());
+    public ResponseEntity<TicketResponse> updateStatus(
+            @PathVariable Long id,
+            @Valid @RequestBody TicketStatusUpdateRequest body) {
+        return ResponseEntity.ok(ticketService.updateStatus(id, body));
     }
 
-    // 🔷 ASSIGN TECHNICIAN
+    /** PUT — assign technician. */
     @PutMapping("/{id}/assign")
-    public Ticket assignTechnician(@PathVariable Long id, @RequestBody Ticket t) {
-        return service.assignTechnician(id, t.getTechnicianId());
+    public ResponseEntity<TicketResponse> assign(
+            @PathVariable Long id,
+            @Valid @RequestBody TicketAssignRequest body) {
+        return ResponseEntity.ok(ticketService.assignTechnician(id, body));
     }
 
-    // 🔷 DELETE TICKET (optional)
+    /** PATCH — append / set resolution notes (technician update). */
+    @PatchMapping("/{id}/resolution")
+    public ResponseEntity<TicketResponse> patchResolution(
+            @PathVariable Long id,
+            @Valid @RequestBody TicketResolutionPatchRequest body) {
+        return ResponseEntity.ok(ticketService.addResolutionNotes(id, body));
+    }
+
+    /** DELETE — remove ticket (204 No Content). */
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
-        service.deleteTicket(id);
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        ticketService.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 }

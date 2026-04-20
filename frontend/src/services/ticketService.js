@@ -1,13 +1,25 @@
 import axios from "axios";
 
-const API = "http://localhost:8080/tickets";
+const API = "http://localhost:8080/api/tickets";
 
 export const createTicket = (data) => axios.post(API, data);
 
 export const getTickets = () => axios.get(API);
 
-export const updateStatus = (id, status) =>
-  axios.put(`${API}/${id}`, { status });
+export const getTicketsByUserId = (userId) => axios.get(`${API}/user/${userId}`);
+
+export const getTicketById = (id) => axios.get(`${API}/${id}`);
+
+export const updateStatus = (id, status, rejectionReason) =>
+  axios.put(`${API}/${id}`, {
+    status,
+    ...(rejectionReason ? { rejectionReason } : {}),
+  });
 
 export const assignTechnician = (id, technicianId) =>
   axios.put(`${API}/${id}/assign`, { technicianId });
+
+export const patchResolution = (id, resolutionNotes) =>
+  axios.patch(`${API}/${id}/resolution`, { resolutionNotes });
+
+export const deleteTicket = (id) => axios.delete(`${API}/${id}`);
