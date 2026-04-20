@@ -69,7 +69,7 @@ const MyBookings = () => {
 
     const getStatusStyle = (status) => {
         switch (status) {
-            case 'APPROVED': return 'bg-emerald-50 text-emerald-700 border-emerald-100';
+            case 'CONFIRMED': return 'bg-emerald-50 text-emerald-700 border-emerald-100';
             case 'REJECTED': return 'bg-rose-50 text-rose-700 border-rose-100';
             case 'PENDING': return 'bg-amber-50 text-amber-700 border-amber-100';
             case 'CANCELLED': return 'bg-gray-50 text-gray-600 border-gray-200';
@@ -127,7 +127,7 @@ const MyBookings = () => {
                                             </td>
                                             <td className="px-8 py-6">
                                                 <span className={`inline-flex px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider border ${getStatusStyle(booking.status)}`}>
-                                                    {booking.status === 'APPROVED' ? 'CONFIRMED' : booking.status}
+                                                    {booking.status}
                                                 </span>
                                                 {booking.rejectionReason && (
                                                     <div className={`mt-1.5 text-[10px] font-medium max-w-[200px] ${booking.status === 'CANCELLED' ? 'text-gray-500' : 'text-rose-500'}`}>
@@ -137,7 +137,7 @@ const MyBookings = () => {
                                                 )}
                                             </td>
                                             <td className="px-8 py-6 text-right">
-                                                {booking.status === 'APPROVED' && (
+                                                {booking.status === 'CONFIRMED' && (
                                                     <div className="flex justify-end gap-3">
                                                         <button
                                                             onClick={() => handleGenerateQr(booking)}

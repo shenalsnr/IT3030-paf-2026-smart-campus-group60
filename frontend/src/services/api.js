@@ -13,7 +13,7 @@ export const bookingService = {
     createBooking: (data) => api.post('', data),
     getUserBookings: (userId) => api.get(`/user?userId=${userId}`),
     getAllBookings: () => api.get(''),
-    approveBooking: (id) => api.put(`/${id}/approve`),
+    confirmBooking: (id) => api.put(`/${id}/confirm`),
     rejectBooking: (id, reason) => api.put(`/${id}/reject`, { reason }),
     cancelBooking: (id, reason) => api.put(`/${id}/cancel`, { reason }),
 };

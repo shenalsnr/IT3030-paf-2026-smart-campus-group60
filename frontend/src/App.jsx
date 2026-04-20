@@ -17,7 +17,7 @@ const Navigation = () => {
     const isAdminRoute = location.pathname.startsWith('/admin');
     const isHome = location.pathname === '/';
     const isAuth = location.pathname === '/auth';
-    
+
     if (isHome || isAuth) return null;
 
     return (

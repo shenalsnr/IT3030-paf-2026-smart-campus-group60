@@ -39,7 +39,7 @@ const AdminDashboard = () => {
 
     const handleApprove = async (id) => {
         try {
-            await bookingService.approveBooking(id);
+            await bookingService.confirmBooking(id);
             fetchBookings();
         } catch (error) {
             alert('Error approving booking');
@@ -64,7 +64,7 @@ const AdminDashboard = () => {
     const getStatusBadge = (status) => {
         const styles = {
             PENDING: 'bg-yellow-100 text-yellow-800 border-yellow-200',
-            APPROVED: 'bg-green-100 text-green-800 border-green-200',
+            CONFIRMED: 'bg-green-100 text-green-800 border-green-200',
             REJECTED: 'bg-red-100 text-red-800 border-red-200',
             CANCELLED: 'bg-gray-100 text-gray-800 border-gray-200',
         };
@@ -73,9 +73,11 @@ const AdminDashboard = () => {
 
     if (loading) return <div className="text-center py-20 font-semibold text-gray-500">Loading Dashboard...</div>;
 
+    const pendingBookings = bookings.filter(b => b.status === 'PENDING');
+
     return (
         <div className="max-w-6xl mx-auto p-6">
-            <button 
+            <button
                 onClick={() => navigate('/admin')}
                 className="flex items-center gap-2 text-sm font-semibold text-gray-500 hover:text-indigo-600 transition-colors mb-6 group"
             >
@@ -108,7 +110,7 @@ const AdminDashboard = () => {
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-100">
-                        {bookings.map((booking) => {
+                        {pendingBookings.map((booking) => {
                             const resource = resources.find(r => String(r.id) === String(booking.resourceId));
                             return (
                                 <React.Fragment key={booking.id}>
@@ -134,7 +136,7 @@ const AdminDashboard = () => {
                                             </div>
                                         </td>
                                         <td className="px-6 py-4">
-                                            <span className={getStatusBadge(booking.status)}>{booking.status === 'APPROVED' ? 'CONFIRMED' : booking.status}</span>
+                                            <span className={getStatusBadge(booking.status)}>{booking.status}</span>
                                         </td>
                                         <td className="px-6 py-4 text-center">
                                             {booking.status === 'PENDING' ? (
@@ -142,7 +144,7 @@ const AdminDashboard = () => {
                                                     <button
                                                         onClick={() => handleApprove(booking.id)}
                                                         className="text-green-500 hover:text-green-700 transition-colors"
-                                                        title="Approve"
+                                                        title="Confirm"
                                                     >
                                                         <CheckCircle size={22} />
                                                     </button>
