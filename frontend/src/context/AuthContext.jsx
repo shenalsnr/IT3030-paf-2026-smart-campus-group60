@@ -16,10 +16,15 @@ export const AuthProvider = ({ children }) => {
         const storedUser = localStorage.getItem('user');
         const storedRole = localStorage.getItem('role');
 
-        if (storedToken && storedUser && storedRole) {
+        // Only require a valid token — user/role are optional fallbacks
+        if (storedToken) {
             setToken(storedToken);
-            setUser(JSON.parse(storedUser));
-            setRole(storedRole);
+            setRole(storedRole || null);
+            try {
+                setUser(storedUser ? JSON.parse(storedUser) : null);
+            } catch {
+                setUser(null);
+            }
             setIsAuthenticated(true);
         }
         setLoading(false);
@@ -44,6 +49,29 @@ export const AuthProvider = ({ children }) => {
             return response.data;
         } catch (error) {
             console.error('Login failed:', error);
+            throw error;
+        }
+    };
+
+    const adminLogin = async (emailOrId, password) => {
+        try {
+            const response = await authService.adminLogin({ emailOrId, password });
+            const { token, role, userId, email, fullName } = response.data;
+
+            // Store in localStorage
+            localStorage.setItem('token', token);
+            localStorage.setItem('role', role);
+            localStorage.setItem('user', JSON.stringify({ userId, email, fullName }));
+
+            // Update state
+            setToken(token);
+            setRole(role);
+            setUser({ userId, email, fullName });
+            setIsAuthenticated(true);
+
+            return response.data;
+        } catch (error) {
+            console.error('Admin Login failed:', error);
             throw error;
         }
     };
@@ -90,6 +118,7 @@ export const AuthProvider = ({ children }) => {
                 role,
                 loading,
                 login,
+                adminLogin,
                 register,
                 logout,
             }}

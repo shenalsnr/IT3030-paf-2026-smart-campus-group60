@@ -3,19 +3,37 @@ import { bookingService } from '../../services/api';
 import { getResources } from '../../services/resourceService';
 import { QRCodeCanvas } from 'qrcode.react';
 import { QrCode, Download, X, Calendar, Clock, User, Landmark } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
 
 const MyBookings = () => {
+    const { user, loading: authLoading } = useAuth();
     const [bookings, setBookings] = useState([]);
     const [resources, setResources] = useState([]);
     const [loading, setLoading] = useState(true);
     const [showQrModal, setShowQrModal] = useState(false);
     const [selectedBooking, setSelectedBooking] = useState(null);
-    const userId = 'user123'; // Hardcoded for demo
+
+    // Derive the current user ID for API calls
+    const currentUserId = (() => {
+        if (user?.userId) return user.userId;
+        try {
+            const token = localStorage.getItem('token');
+            if (token) {
+                const payload = JSON.parse(atob(token.split('.')[1]));
+                return payload.sub;
+            }
+        } catch (e) { }
+        return null;
+    })();
 
     useEffect(() => {
-        fetchBookings();
-        fetchResources();
-    }, []);
+        if (!authLoading && currentUserId) {
+            fetchBookings();
+            fetchResources();
+        } else if (!authLoading && !currentUserId) {
+            setLoading(false);
+        }
+    }, [currentUserId, authLoading]);
 
     const fetchResources = async () => {
         try {
@@ -28,7 +46,7 @@ const MyBookings = () => {
 
     const fetchBookings = async () => {
         try {
-            const response = await bookingService.getUserBookings(userId);
+            const response = await bookingService.getUserBookings(currentUserId);
             setBookings(response.data);
         } catch (error) {
             console.error("Fetch Error:", error.response?.data || error.message);
@@ -69,7 +87,7 @@ const MyBookings = () => {
 
     const getStatusStyle = (status) => {
         switch (status) {
-            case 'APPROVED': return 'bg-emerald-50 text-emerald-700 border-emerald-100';
+            case 'CONFIRMED': return 'bg-emerald-50 text-emerald-700 border-emerald-100';
             case 'REJECTED': return 'bg-rose-50 text-rose-700 border-rose-100';
             case 'PENDING': return 'bg-amber-50 text-amber-700 border-amber-100';
             case 'CANCELLED': return 'bg-gray-50 text-gray-600 border-gray-200';
@@ -127,7 +145,7 @@ const MyBookings = () => {
                                             </td>
                                             <td className="px-8 py-6">
                                                 <span className={`inline-flex px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider border ${getStatusStyle(booking.status)}`}>
-                                                    {booking.status === 'APPROVED' ? 'CONFIRMED' : booking.status}
+                                                    {booking.status}
                                                 </span>
                                                 {booking.rejectionReason && (
                                                     <div className={`mt-1.5 text-[10px] font-medium max-w-[200px] ${booking.status === 'CANCELLED' ? 'text-gray-500' : 'text-rose-500'}`}>
@@ -137,7 +155,7 @@ const MyBookings = () => {
                                                 )}
                                             </td>
                                             <td className="px-8 py-6 text-right">
-                                                {booking.status === 'APPROVED' && (
+                                                {booking.status === 'CONFIRMED' && (
                                                     <div className="flex justify-end gap-3">
                                                         <button
                                                             onClick={() => handleGenerateQr(booking)}
