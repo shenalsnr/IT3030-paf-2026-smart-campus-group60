@@ -38,8 +38,21 @@ const UserProfile = () => {
                 setLoading(true);
                 setError('');
                 const response = await userProfileService.getCurrentUser();
-                setProfileData(response.data);
-                setFormData(response.data);
+                
+                // Ensure notificationPreferences exists
+                const userData = response.data;
+                if (!userData.notificationPreferences) {
+                    userData.notificationPreferences = {
+                        emailNotifications: true,
+                        bookingUpdates: true,
+                        resourceAvailability: true,
+                        systemAlerts: true,
+                    };
+                }
+                
+                setProfileData(userData);
+                setFormData(userData);
+                console.log('Loaded profile data:', userData);
             } catch (err) {
                 console.error('Error fetching user profile:', err);
                 setError('Failed to load profile. Please try again.');
@@ -98,7 +111,20 @@ const UserProfile = () => {
                 submitData.append('profilePhoto', profilePhoto);
             }
 
+            // Log what we're sending
+            console.log('SUBMITTING PROFILE DATA:');
+            console.log('fullName:', formData.fullName);
+            console.log('studentId:', formData.studentId);
+            console.log('phoneNumber:', formData.phoneNumber);
+            console.log('address:', formData.address);
+            console.log('faculty:', formData.faculty);
+            console.log('emailNotifications:', formData.notificationPreferences.emailNotifications);
+            console.log('bookingUpdates:', formData.notificationPreferences.bookingUpdates);
+            console.log('resourceAvailability:', formData.notificationPreferences.resourceAvailability);
+            console.log('systemAlerts:', formData.notificationPreferences.systemAlerts);
+
             const response = await userProfileService.updateUserProfile(submitData);
+            console.log('SUCCESS: Profile updated', response);
             setProfileData(response.data);
             setFormData(response.data);
             setIsEditing(false);
@@ -106,7 +132,8 @@ const UserProfile = () => {
             setSuccess('Profile updated successfully!');
             setTimeout(() => setSuccess(''), 3000);
         } catch (err) {
-            console.error('Error updating profile:', err);
+            console.error('ERROR updating profile:', err);
+            console.error('Error response:', err.response?.data);
             setError(err.response?.data?.message || 'Failed to update profile. Please try again.');
         } finally {
             setSaving(false);

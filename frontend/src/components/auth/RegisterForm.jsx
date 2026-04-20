@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { authService } from '../../services/authService';
 
 export const RegisterForm = () => {
     const [formData, setFormData] = useState({
@@ -12,12 +13,12 @@ export const RegisterForm = () => {
         faculty: 'COMPUTING',
         password: '',
         confirmPassword: '',
-        profilePhotoPath: '',
+        profilePhoto: null,
     });
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
+    const [profileFileName, setProfileFileName] = useState('');
     const navigate = useNavigate();
-    const { register } = useAuth();
 
     const facultyOptions = [
         { value: 'COMPUTING', label: 'Faculty of Computing' },
@@ -37,11 +38,11 @@ export const RegisterForm = () => {
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         if (file) {
-            // For now, store the file name. In production, you'd upload to a server
             setFormData((prev) => ({
                 ...prev,
-                profilePhotoPath: file.name,
+                profilePhoto: file,
             }));
+            setProfileFileName(file.name);
         }
     };
 
@@ -88,10 +89,40 @@ export const RegisterForm = () => {
         setLoading(true);
 
         try {
-            await register(formData);
+            // Create FormData for multipart/form-data request
+            const submitData = new FormData();
+            submitData.append('fullName', formData.fullName);
+            submitData.append('studentId', formData.studentId);
+            submitData.append('email', formData.email);
+            submitData.append('phoneNumber', formData.phoneNumber);
+            submitData.append('address', formData.address);
+            submitData.append('faculty', formData.faculty);
+            submitData.append('password', formData.password);
+            submitData.append('confirmPassword', formData.confirmPassword);
+            
+            // Append profile photo if selected
+            if (formData.profilePhoto) {
+                submitData.append('profilePhoto', formData.profilePhoto);
+            }
+
+            console.log('Submitting registration with FormData');
+            const response = await authService.register(submitData);
+            
+            console.log('Registration successful:', response.data);
+            
+            // Store authentication data
+            const { token, role, userId, email, fullName } = response.data;
+            localStorage.setItem('token', token);
+            localStorage.setItem('role', role);
+            localStorage.setItem('user', JSON.stringify({ userId, email, fullName }));
+            
+            // Navigate to student catalogue
             navigate('/student-catalogue');
         } catch (err) {
-            setError(err.response?.data?.message || 'Registration failed. Please try again.');
+            console.error('Registration error:', err);
+            console.error('Error response:', err.response?.data);
+            const errorMessage = err.response?.data?.message || 'Registration failed. Please try again.';
+            setError(errorMessage);
         } finally {
             setLoading(false);
         }
@@ -101,7 +132,7 @@ export const RegisterForm = () => {
         <div className="space-y-6">
             <form onSubmit={handleSubmit} className="space-y-4">
                 {error && (
-                    <div className="p-4 bg-red-500/20 border border-red-500 rounded-lg text-red-200">
+                    <div className="p-4 bg-red-700 border-2 border-red-900 rounded-lg text-white font-bold text-lg shadow-lg">
                         {error}
                     </div>
                 )}
@@ -211,8 +242,8 @@ export const RegisterForm = () => {
                             accept="image/*"
                             className="w-full px-4 py-2 bg-gray-700/50 border border-gray-600 rounded-lg text-gray-300 focus:outline-none focus:border-blue-500 transition file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700"
                         />
-                        {formData.profilePhotoPath && (
-                            <p className="text-sm text-gray-400 mt-2">Selected: {formData.profilePhotoPath}</p>
+                        {profileFileName && (
+                            <p className="text-sm text-gray-400 mt-2">Selected: {profileFileName}</p>
                         )}
                     </div>
 
