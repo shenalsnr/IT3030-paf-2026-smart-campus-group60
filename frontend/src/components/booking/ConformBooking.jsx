@@ -25,7 +25,7 @@ const ConformBooking = () => {
                 getResources()
             ]);
 
-            const confirmedBookings = bookingsRes.data.filter(b => b.status === 'CONFIRMED');
+            const confirmedBookings = bookingsRes.data.filter(b => b.status === 'APPROVED');
             setBookings(confirmedBookings);
             setResources(resourcesRes);
         } catch (error) {

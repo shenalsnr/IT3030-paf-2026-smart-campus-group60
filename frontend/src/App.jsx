@@ -19,7 +19,7 @@ import AdminDashboard from "./components/booking/AdminDashboard";
 import ConformBooking from "./components/booking/ConformBooking";
 import AdminHub from "./components/AdminHub";
 
-// Ticket Module Imports
+// Ticket Module
 import CreateTicket from "./components/CreateTicket";
 import UserTickets from "./components/UserTickets";
 import AdminTickets from "./components/AdminTickets";
@@ -31,6 +31,7 @@ import StudentCatalogue from "./components/StudentCatalogue";
 import AdminFeedback from "./components/AdminFeedback";
 import UserProfile from "./pages/student/StudentProfile";
 import UserManagement from "./pages/admin/UserManagement";
+import NotificationPanel from "./components/NotificationPanel";
 
 import {
   GraduationCap,
@@ -113,7 +114,8 @@ const Navigation = () => {
             </div>
           )}
 
-          <div className="flex space-x-2 ml-4">
+          <div className="flex items-center space-x-2 ml-4">
+            <NotificationPanel />
             <button
               onClick={() => {
                 logout();

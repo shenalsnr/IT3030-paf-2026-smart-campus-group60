@@ -64,7 +64,7 @@ public class BookingService {
             throw new RuntimeException("Only PENDING bookings can be confirmed");
         }
 
-        booking.setStatus(BookingStatus.CONFIRMED);
+        booking.setStatus(BookingStatus.APPROVED);
         return bookingRepository.save(booking);
     }
 
@@ -85,8 +85,8 @@ public class BookingService {
         Booking booking = bookingRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Booking not found"));
 
-        if (booking.getStatus() != BookingStatus.CONFIRMED) {
-            throw new RuntimeException("Only CONFIRMED bookings can be cancelled");
+        if (booking.getStatus() != BookingStatus.APPROVED) {
+            throw new RuntimeException("Only APPROVED bookings can be cancelled");
         }
 
         booking.setStatus(BookingStatus.CANCELLED);

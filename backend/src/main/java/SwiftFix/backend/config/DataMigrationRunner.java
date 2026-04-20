@@ -23,9 +23,9 @@ public class DataMigrationRunner implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         try {
-            int updatedRows = jdbcTemplate.update("UPDATE bookings SET status = 'CONFIRMED' WHERE status = 'APPROVED'");
+            int updatedRows = jdbcTemplate.update("UPDATE bookings SET status = 'APPROVED' WHERE status = 'CONFIRMED'");
             if (updatedRows > 0) {
-                System.out.println("Data Migration: Migrated " + updatedRows + " bookings from APPROVED to CONFIRMED.");
+                System.out.println("Data Migration: Migrated " + updatedRows + " bookings from CONFIRMED to APPROVED.");
             }
         } catch (Exception e) {
             System.err.println("Data Migration failed or not needed: " + e.getMessage());
