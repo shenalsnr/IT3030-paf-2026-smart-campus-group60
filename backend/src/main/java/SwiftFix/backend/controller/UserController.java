@@ -51,23 +51,43 @@ public class UserController {
      * POST /api/users/update-profile - Update user profile and notification preferences
      */
     @PostMapping("/update-profile")
-    public ResponseEntity<UserDTO> updateUserProfile(
+    public ResponseEntity<?> updateUserProfile(
             @RequestHeader(value = "Authorization", required = false) String authHeader,
-            @RequestParam("fullName") String fullName,
+            @RequestParam(value = "fullName", required = false) String fullName,
             @RequestParam(value = "studentId", required = false) String studentId,
-            @RequestParam("phoneNumber") String phoneNumber,
-            @RequestParam("address") String address,
-            @RequestParam("faculty") String faculty,
-            @RequestParam(value = "emailNotifications", required = false) Boolean emailNotifications,
-            @RequestParam(value = "bookingUpdates", required = false) Boolean bookingUpdates,
-            @RequestParam(value = "resourceAvailability", required = false) Boolean resourceAvailability,
-            @RequestParam(value = "systemAlerts", required = false) Boolean systemAlerts,
+            @RequestParam(value = "phoneNumber", required = false) String phoneNumber,
+            @RequestParam(value = "address", required = false) String address,
+            @RequestParam(value = "faculty", required = false) String faculty,
+            @RequestParam(value = "emailNotifications", required = false) String emailNotifications,
+            @RequestParam(value = "bookingUpdates", required = false) String bookingUpdates,
+            @RequestParam(value = "resourceAvailability", required = false) String resourceAvailability,
+            @RequestParam(value = "systemAlerts", required = false) String systemAlerts,
             @RequestParam(value = "profilePhoto", required = false) MultipartFile profilePhoto) {
         
         Long userId = extractUserIdFromToken(authHeader);
         if (userId == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            System.out.println("ERROR: No userId extracted from token");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
+                    java.util.Map.of("message", "Unauthorized: No valid token found"));
         }
+
+        System.out.println("UPDATE PROFILE REQUEST - User: " + userId);
+        System.out.println("  fullName: " + fullName);
+        System.out.println("  studentId: " + studentId);
+        System.out.println("  phoneNumber: " + phoneNumber);
+        System.out.println("  address: " + address);
+        System.out.println("  faculty: " + faculty);
+        System.out.println("  emailNotifications: " + emailNotifications);
+        System.out.println("  bookingUpdates: " + bookingUpdates);
+        System.out.println("  resourceAvailability: " + resourceAvailability);
+        System.out.println("  systemAlerts: " + systemAlerts);
+        System.out.println("  profilePhoto: " + (profilePhoto != null ? profilePhoto.getOriginalFilename() : "null"));
+
+        // Convert string booleans to Boolean objects
+        Boolean emailNotifBool = emailNotifications != null ? Boolean.parseBoolean(emailNotifications) : null;
+        Boolean bookingUpdatesBool = bookingUpdates != null ? Boolean.parseBoolean(bookingUpdates) : null;
+        Boolean resourceAvailBool = resourceAvailability != null ? Boolean.parseBoolean(resourceAvailability) : null;
+        Boolean systemAlertsBool = systemAlerts != null ? Boolean.parseBoolean(systemAlerts) : null;
 
         UpdateProfileRequest request = UpdateProfileRequest.builder()
                 .fullName(fullName)
@@ -75,18 +95,21 @@ public class UserController {
                 .phoneNumber(phoneNumber)
                 .address(address)
                 .faculty(faculty)
-                .emailNotifications(emailNotifications)
-                .bookingUpdates(bookingUpdates)
-                .resourceAvailability(resourceAvailability)
-                .systemAlerts(systemAlerts)
+                .emailNotifications(emailNotifBool)
+                .bookingUpdates(bookingUpdatesBool)
+                .resourceAvailability(resourceAvailBool)
+                .systemAlerts(systemAlertsBool)
                 .build();
 
         try {
             UserDTO updatedUser = userService.updateUserProfile(userId, request, profilePhoto);
+            System.out.println("✓ Profile updated successfully for user: " + userId);
             return ResponseEntity.ok(updatedUser);
         } catch (Exception e) {
+            System.out.println("✗ Error updating profile: " + e.getMessage());
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                    java.util.Map.of("message", "Failed to update profile: " + e.getMessage()));
         }
     }
 

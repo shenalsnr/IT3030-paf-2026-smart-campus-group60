@@ -40,7 +40,20 @@ public class UserService {
     public UserDTO getCurrentUser(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
-        NotificationPreference notificationPreference = notificationPreferenceRepository.findByUserId(id).orElse(null);
+        
+        NotificationPreference notificationPreference = notificationPreferenceRepository.findByUserId(id)
+                .orElseGet(() -> {
+                    // Create default notification preferences if they don't exist
+                    NotificationPreference newPref = NotificationPreference.builder()
+                            .user(user)
+                            .emailNotifications(true)
+                            .bookingUpdates(true)
+                            .resourceAvailability(true)
+                            .systemAlerts(true)
+                            .build();
+                    return notificationPreferenceRepository.save(newPref);
+                });
+        
         return UserDTO.fromUserWithNotifications(user, notificationPreference);
     }
 
@@ -99,10 +112,10 @@ public class UserService {
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
 
         // Update user fields
-        if (request.getFullName() != null) {
+        if (request.getFullName() != null && !request.getFullName().isEmpty()) {
             user.setFullName(request.getFullName());
         }
-        if (request.getPhoneNumber() != null) {
+        if (request.getPhoneNumber() != null && !request.getPhoneNumber().isEmpty()) {
             user.setPhoneNumber(request.getPhoneNumber());
         }
         
@@ -114,19 +127,23 @@ public class UserService {
             } catch (IOException e) {
                 // Log error but continue with other updates
                 System.err.println("Failed to save profile photo: " + e.getMessage());
+                e.printStackTrace();
             }
         }
-        if (request.getAddress() != null) {
+        if (request.getAddress() != null && !request.getAddress().isEmpty()) {
             user.setAddress(request.getAddress());
         }
-        if (request.getFaculty() != null) {
+        if (request.getFaculty() != null && !request.getFaculty().isEmpty()) {
             user.setFaculty(request.getFaculty());
         }
-        if (request.getProfilePhotoPath() != null) {
+        if (request.getProfilePhotoPath() != null && !request.getProfilePhotoPath().isEmpty()) {
             user.setProfilePhotoPath(request.getProfilePhotoPath());
         }
-        if (request.getStudentId() != null && user.getStudentId() != null && user.getStudentId().startsWith("OAUTH2_")) {
-            user.setStudentId(request.getStudentId());
+        // Update studentId if provided (allow updates from OAUTH2 users)
+        if (request.getStudentId() != null && !request.getStudentId().isEmpty()) {
+            if (user.getStudentId() == null || user.getStudentId().startsWith("OAUTH2_") || user.getStudentId().isEmpty()) {
+                user.setStudentId(request.getStudentId());
+            }
         }
 
         User updatedUser = userRepository.save(user);

@@ -34,7 +34,7 @@ export const LoginForm = () => {
         <div className="space-y-6">
             <form onSubmit={handleSubmit} className="space-y-4">
                 {error && (
-                    <div className="p-4 bg-red-500/20 border border-red-500 rounded-lg text-red-200">
+                    <div className="p-4 bg-red-700 border-2 border-red-900 rounded-lg text-white font-bold text-lg shadow-lg">
                         {error}
                     </div>
                 )}
