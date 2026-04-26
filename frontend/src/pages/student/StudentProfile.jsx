@@ -38,7 +38,6 @@ const UserProfile = () => {
                 setLoading(true);
                 setError('');
                 const response = await userProfileService.getCurrentUser();
-                
                 // Ensure notificationPreferences exists
                 const userData = response.data;
                 if (!userData.notificationPreferences) {
@@ -94,18 +93,21 @@ const UserProfile = () => {
         setSuccess('');
 
         try {
+            // Safe fallback in case notificationPreferences is null/undefined
+            const prefs = formData.notificationPreferences || {};
+
             const submitData = new FormData();
             submitData.append('fullName', formData.fullName || '');
             submitData.append('studentId', formData.studentId || '');
             submitData.append('phoneNumber', formData.phoneNumber || '');
             submitData.append('address', formData.address || '');
             submitData.append('faculty', formData.faculty || '');
-            
-            // Add notification preferences
-            submitData.append('emailNotifications', formData.notificationPreferences.emailNotifications);
-            submitData.append('bookingUpdates', formData.notificationPreferences.bookingUpdates);
-            submitData.append('resourceAvailability', formData.notificationPreferences.resourceAvailability);
-            submitData.append('systemAlerts', formData.notificationPreferences.systemAlerts);
+
+            // Add notification preferences with safe defaults
+            submitData.append('emailNotifications', prefs.emailNotifications ?? true);
+            submitData.append('bookingUpdates', prefs.bookingUpdates ?? true);
+            submitData.append('resourceAvailability', prefs.resourceAvailability ?? true);
+            submitData.append('systemAlerts', prefs.systemAlerts ?? true);
 
             if (profilePhoto) {
                 submitData.append('profilePhoto', profilePhoto);
