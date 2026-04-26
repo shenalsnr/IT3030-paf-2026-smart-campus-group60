@@ -20,10 +20,38 @@ The application follows a **Spring Boot REST API + React client** architecture a
 
 ## Key Features
 
-### 1. Facilities & Assets Catalogue
-- Manage bookable resources such as lecture halls, labs, meeting rooms, and equipment
-- Store resource details such as type, capacity, location, availability, and status
-- Search and filter resources easily
+### 1.Module A - Facilities & Assets Catalogue
+Module A 
+Overview
+This module is responsible for managing all bookable resources within the Smart Campus system, including lecture halls, laboratories, meeting rooms, and equipment. It provides structured access to resource information and supports efficient discovery and management.
+
+Features
+Add, update, delete, and view resources (CRUD operations)
+Maintain detailed resource metadata:
+   Resource name
+   Type (Lecture Hall, Lab, Equipment, etc.)
+   Capacity
+   Location
+   Availability time windows
+   Status (ACTIVE / OUT_OF_SERVICE)
+   
+Advanced search and filtering:
+Filter by type, capacity, and location
+Keyword-based search
+Resource availability visibility:
+Prevent selection of unavailable or inactive resources
+
+Business Logic
+Only resources with ACTIVE status can be booked
+Resources marked as OUT_OF_SERVICE are automatically excluded from booking
+Capacity validation ensures suitable allocation based on user requirements
+Availability windows restrict bookings to valid time ranges
+
+Role-Based Access
+Admin
+Full control (create, update, delete resources)
+User
+View and search resources only
 
 ### 2. Booking Management
 - Create booking requests for resources
