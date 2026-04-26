@@ -38,8 +38,18 @@ const UserProfile = () => {
                 setLoading(true);
                 setError('');
                 const response = await userProfileService.getCurrentUser();
-                setProfileData(response.data);
-                setFormData(response.data);
+                // Ensure notificationPreferences always has a default object
+                const data = {
+                    ...response.data,
+                    notificationPreferences: response.data.notificationPreferences || {
+                        emailNotifications: true,
+                        bookingUpdates: true,
+                        resourceAvailability: true,
+                        systemAlerts: true,
+                    },
+                };
+                setProfileData(data);
+                setFormData(data);
             } catch (err) {
                 console.error('Error fetching user profile:', err);
                 setError('Failed to load profile. Please try again.');
@@ -81,18 +91,21 @@ const UserProfile = () => {
         setSuccess('');
 
         try {
+            // Safe fallback in case notificationPreferences is null/undefined
+            const prefs = formData.notificationPreferences || {};
+
             const submitData = new FormData();
             submitData.append('fullName', formData.fullName || '');
             submitData.append('studentId', formData.studentId || '');
             submitData.append('phoneNumber', formData.phoneNumber || '');
             submitData.append('address', formData.address || '');
             submitData.append('faculty', formData.faculty || '');
-            
-            // Add notification preferences
-            submitData.append('emailNotifications', formData.notificationPreferences.emailNotifications);
-            submitData.append('bookingUpdates', formData.notificationPreferences.bookingUpdates);
-            submitData.append('resourceAvailability', formData.notificationPreferences.resourceAvailability);
-            submitData.append('systemAlerts', formData.notificationPreferences.systemAlerts);
+
+            // Add notification preferences with safe defaults
+            submitData.append('emailNotifications', prefs.emailNotifications ?? true);
+            submitData.append('bookingUpdates', prefs.bookingUpdates ?? true);
+            submitData.append('resourceAvailability', prefs.resourceAvailability ?? true);
+            submitData.append('systemAlerts', prefs.systemAlerts ?? true);
 
             if (profilePhoto) {
                 submitData.append('profilePhoto', profilePhoto);
