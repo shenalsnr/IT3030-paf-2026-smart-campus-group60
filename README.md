@@ -20,39 +20,57 @@ The application follows a **Spring Boot REST API + React client** architecture a
 
 ## Key Features
 
-### 1.Module A - Facilities & Assets Catalogue
-Module A 
-Overview
-This module is responsible for managing all bookable resources within the Smart Campus system, including lecture halls, laboratories, meeting rooms, and equipment. It provides structured access to resource information and supports efficient discovery and management.
+## 🧩 Module A – Facilities & Assets Catalogue
 
-Features
-Add, update, delete, and view resources (CRUD operations)
-Maintain detailed resource metadata:
-   Resource name
-   Type (Lecture Hall, Lab, Equipment, etc.)
-   Capacity
-   Location
-   Availability time windows
-   Status (ACTIVE / OUT_OF_SERVICE)
-   
-Advanced search and filtering:
-Filter by type, capacity, and location
-Keyword-based search
-Resource availability visibility:
-Prevent selection of unavailable or inactive resources
+### Overview
+- Manages all bookable resources in the Smart Campus system  
+- Includes lecture halls, laboratories, meeting rooms, and equipment  
+- Provides structured access to resource data  
+- Enables efficient resource discovery and management  
+---
+### Features
 
-Business Logic
-Only resources with ACTIVE status can be booked
-Resources marked as OUT_OF_SERVICE are automatically excluded from booking
-Capacity validation ensures suitable allocation based on user requirements
-Availability windows restrict bookings to valid time ranges
+#### Resource Management (CRUD)
+- Add new resources  
+- Update existing resources  
+- Delete resources  
+- View all resources  
 
-Role-Based Access
-Admin
-Full control (create, update, delete resources)
-User
-View and search resources only
+#### Resource Metadata
+- Resource name  
+- Type (Lecture Hall, Lab, Equipment, etc.)  
+- Capacity  
+- Location  
+- Availability time windows  
+- Status (ACTIVE / OUT_OF_SERVICE)  
 
+#### Search & Filtering
+- Filter by:
+  - Type  
+  - Capacity  
+  - Location  
+- Keyword-based search  
+
+#### Resource Availability
+- Prevent selection of unavailable resources  
+- Exclude inactive (OUT_OF_SERVICE) resources  
+---
+
+### Business Logic
+- Only resources with **ACTIVE** status can be booked  
+- Resources marked as **OUT_OF_SERVICE** cannot be used  
+- Capacity validation ensures appropriate resource allocation  
+- Bookings must fall within defined availability time windows  
+---
+### Role-Based Access
+**Admin**
+- Create resources  
+- Update resources  
+- Delete resources  
+- View all resources  
+**User**
+- View resources  
+- Search and filter resources  
 ### 2. Booking Management
 - Create booking requests for resources
 - Booking workflow: **PENDING → CONFIRMED / REJECTED**
